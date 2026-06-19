@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube UI Clone</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f9f9f9;
+}
+
+/* Header */
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 20px;
+    background:#fff;
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:1000;
+    border-bottom:1px solid #ddd;
+}
+
+.left-section{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.logo{
+    color:red;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.search-section{
+    display:flex;
+    flex:1;
+    justify-content:center;
+    max-width:600px;
+}
+
+.search-section input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:20px 0 0 20px;
+}
+
+.search-section button{
+    padding:10px 20px;
+    border:1px solid #ccc;
+    background:#f1f1f1;
+    border-radius:0 20px 20px 0;
+    cursor:pointer;
+}
+
+.right-section{
+    display:flex;
+    gap:20px;
+    font-size:20px;
+}
+
+/* Layout */
+.container{
+    display:flex;
+    margin-top:65px;
+}
+
+/* Sidebar */
+.sidebar{
+    width:220px;
+    background:#fff;
+    height:calc(100vh - 65px);
+    position:fixed;
+    overflow-y:auto;
+    border-right:1px solid #ddd;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    padding:15px 20px;
+    cursor:pointer;
+}
+
+.sidebar li:hover{
+    background:#f0f0f0;
+}
+
+.sidebar i{
+    margin-right:12px;
+}
+
+/* Content */
+.content{
+    margin-left:220px;
+    padding:20px;
+    width:100%;
+}
+
+.video-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:20px;
+}
+
+.video-card{
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.video-card:hover{
+    transform:translateY(-5px);
+}
+
+.video-card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.video-info{
+    padding:10px;
+}
+
+.video-info h3{
+    font-size:16px;
+    margin-bottom:5px;
+}
+
+.video-info p{
+    color:#666;
+    font-size:14px;
+}
+
+/* Responsive */
+@media(max-width:768px){
+
+    .sidebar{
+        width:70px;
+    }
+
+    .sidebar span{
+        display:none;
+    }
+
+    .content{
+        margin-left:70px;
+    }
+
+    .search-section{
+        max-width:300px;
+    }
+}
+
+@media(max-width:600px){
+
+    .search-section{
+        display:none;
+    }
+
+    .content{
+        margin-left:70px;
+        padding:10px;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="left-section">
+        <i class="fas fa-bars"></i>
+        <div class="logo">
+            <i class="fab fa-youtube"></i> YouTube
+        </div>
+    </div>
+
+    <div class="search-section">
+        <input type="text" placeholder="Search">
+        <button><i class="fas fa-search"></i></button>
+    </div>
+
+    <div class="right-section">
+        <i class="fas fa-video"></i>
+        <i class="fas fa-bell"></i>
+        <i class="fas fa-user-circle"></i>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="sidebar">
+        <ul>
+            <li><i class="fas fa-home"></i><span>Home</span></li>
+            <li><i class="fas fa-bolt"></i><span>Shorts</span></li>
+            <li><i class="fas fa-play-circle"></i><span>Subscriptions</span></li>
+            <li><i class="fas fa-book"></i><span>Library</span></li>
+            <li><i class="fas fa-history"></i><span>History</span></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="video-grid" id="videoGrid"></div>
+    </div>
+
+</div>
+
+<script>
+const videos = [
+{
+title:"Learn HTML in 30 Minutes",
+channel:"Code Academy",
+views:"1.2M views • 2 days ago",
+thumbnail:"https://picsum.photos/400/250?random=1"
+},
+{
+title:"CSS Flexbox Tutorial",
+channel:"Web Dev",
+views:"850K views • 1 week ago",
+thumbnail:"https://picsum.photos/400/250?random=2"
+},
+{
+title:"JavaScript Crash Course",
+channel:"Programming Hub",
+views:"2.1M views • 5 days ago",
+thumbnail:"https://picsum.photos/400/250?random=3"
+},
+{
+title:"Build Responsive Websites",
+channel:"Frontend Master",
+views:"650K views • 3 weeks ago",
+thumbnail:"https://picsum.photos/400/250?random=4"
+},
+{
+title:"React Beginner Guide",
+channel:"Tech World",
+views:"900K views • 4 days ago",
+thumbnail:"https://picsum.photos/400/250?random=5"
+},
+{
+title:"Bootstrap Tutorial",
+channel:"Coding Point",
+views:"700K views • 2 weeks ago",
+thumbnail:"https://picsum.photos/400/250?random=6"
+}
+];
+
+const videoGrid = document.getElementById("videoGrid");
+
+videos.forEach(video => {
+    videoGrid.innerHTML += `
+    <div class="video-card">
+        <img src="${video.thumbnail}" alt="">
+        <div class="video-info">
+            <h3>${video.title}</h3>
+            <p>${video.channel}</p>
+            <p>${video.views}</p>
+        </div>
+    </div>
+    `;
+});
+</script>
+
+</body>
+</html>
